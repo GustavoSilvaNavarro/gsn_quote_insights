@@ -1,7 +1,10 @@
 {
   "cSpell.words": [
     "adminjs",
+    "autoincrement",
+    "healthcheck",
     "healthz",
+    "isready",
     "qodo"
   ]
 }
