@@ -1,6 +1,7 @@
 import { logger } from '@adapters';
 import { PORT } from '@config';
 import helmet from '@fastify/helmet';
+import { customHeadersPlugin } from '@middlewares';
 import { prismaPlugin } from '@plugins';
 import Fastify, { type FastifyBaseLogger } from 'fastify';
 import { serializerCompiler, validatorCompiler, type ZodTypeProvider } from 'fastify-type-provider-zod';
@@ -19,7 +20,9 @@ export const startServer = async () => {
   try {
     // Register plugins
     fastify.register(prismaPlugin);
+
     fastify.register(helmet);
+    fastify.register(customHeadersPlugin);
 
     // Register all routes
     await registerRoutes(fastify);

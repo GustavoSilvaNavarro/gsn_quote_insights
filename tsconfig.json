@@ -34,6 +34,8 @@
       "@services/*": ["./src/services/*"],
       "@interfaces": ["./src/interfaces/index"],
       "@interfaces/*": ["./src/interfaces/*"],
+      "@middlewares": ["./src/server/middlewares/index"],
+      "@middlewares/*": ["./src/server/middlewares/*"],
     },
     "plugins": [
       { "transform": "typescript-transform-paths" },

@@ -1,1 +1,1 @@
-export { addNewQuote } from './quotes';
+export { addNewQuote, deleteQuote, getListOfQuotes, getSingleQuote, updateQuote } from './quotes';
