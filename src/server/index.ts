@@ -1,18 +1,28 @@
-import Fastify, { type FastifyBaseLogger } from 'fastify';
-import { PORT } from '@config';
-import registerRoutes from './routers';
 import { logger } from '@adapters';
+import { PORT } from '@config';
 import helmet from '@fastify/helmet';
+import { customHeadersPlugin } from '@middlewares';
+import { prismaPlugin } from '@plugins';
+import Fastify, { type FastifyBaseLogger } from 'fastify';
+import { serializerCompiler, validatorCompiler, type ZodTypeProvider } from 'fastify-type-provider-zod';
+
+import registerRoutes from './routers';
 
 const fastify = Fastify({
   loggerInstance: logger as FastifyBaseLogger,
   disableRequestLogging: true,
-});
+}).withTypeProvider<ZodTypeProvider>();
+
+fastify.setValidatorCompiler(validatorCompiler);
+fastify.setSerializerCompiler(serializerCompiler);
 
 export const startServer = async () => {
   try {
     // Register plugins
+    fastify.register(prismaPlugin);
+
     fastify.register(helmet);
+    fastify.register(customHeadersPlugin);
 
     // Register all routes
     await registerRoutes(fastify);
@@ -23,4 +33,4 @@ export const startServer = async () => {
     fastify.log.error('Error starting fastify server', err);
     process.exit(1);
   }
-}
+};

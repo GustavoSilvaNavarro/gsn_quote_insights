@@ -1,7 +1,7 @@
-import { onExit } from 'signal-exit';
-import { NAME } from '@config';
 import { logger } from '@adapters';
+import { NAME } from '@config';
 import { startServer } from '@server';
+import { onExit } from 'signal-exit';
 
 // Handle process errors
 process.on('uncaughtException', (err) => {
@@ -10,7 +10,7 @@ process.on('uncaughtException', (err) => {
 });
 process.on('unhandledRejection', (err) => logger.error(err, 'unhandledRejection'));
 
-(async () => {
+void (async () => {
   await startServer();
 
   logger.info(`${NAME} Service started and running`);
