@@ -1,10 +1,11 @@
-import Fastify, { type FastifyBaseLogger } from 'fastify';
-import { PORT } from '@config';
-import registerRoutes from './routers';
 import { logger } from '@adapters';
+import { PORT } from '@config';
 import helmet from '@fastify/helmet';
 import { prismaPlugin } from '@plugins';
-import { type ZodTypeProvider, validatorCompiler, serializerCompiler } from 'fastify-type-provider-zod';
+import Fastify, { type FastifyBaseLogger } from 'fastify';
+import { serializerCompiler, validatorCompiler, type ZodTypeProvider } from 'fastify-type-provider-zod';
+
+import registerRoutes from './routers';
 
 const fastify = Fastify({
   loggerInstance: logger as FastifyBaseLogger,
@@ -29,4 +30,4 @@ export const startServer = async () => {
     fastify.log.error('Error starting fastify server', err);
     process.exit(1);
   }
-}
+};

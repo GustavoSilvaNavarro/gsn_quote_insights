@@ -1,14 +1,13 @@
+import logger from '@adapters/logger';
+import { PrismaClient } from '@prisma/client';
 import { type FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
-import { PrismaClient } from '@prisma/client';
-import logger from '@adapters/logger';
 
 export const prismaPlugin = fp(async (fastify: FastifyInstance, _opts: unknown) => {
   try {
     const prisma = new PrismaClient();
 
     await prisma.$connect();
-
 
     fastify.decorate('prisma', prisma);
     fastify.log.info('🔥 Prisma - Connection to db has been established successfully.');

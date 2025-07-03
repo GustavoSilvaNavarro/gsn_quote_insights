@@ -16,10 +16,10 @@ prisma-init:
 	npx prisma init
 
 prisma-apply-migration:
-	npx prisma migrate dev
+	npm run migration:up
 
 prisma-migration-down:
-	npx prisma migrate reset
+	npm run migration:down
 
 prisma-create-migration:
 	npx prisma migrate dev --name $(name)
