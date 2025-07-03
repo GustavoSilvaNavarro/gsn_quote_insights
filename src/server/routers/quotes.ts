@@ -1,12 +1,14 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import { newQuotePayload, type NewQuote } from '@interfaces';
+import { addNewQuote } from '@services';
 
 const quoteRoutes = async (fastify: FastifyInstance) => {
-  fastify.post('/new/quote', (req: FastifyRequest, reply: FastifyReply) => {
+  fastify.post('/new/quote', { schema: { body: newQuotePayload } }, async (req: FastifyRequest<{ Body: NewQuote }>, reply: FastifyReply) => {
     const payload = req.body;
-    console.log(payload);
+    const newQuote = await addNewQuote(fastify.prisma, payload);
 
     reply.status(201);
-    return { msg: 'Success' };
+    return newQuote;
   });
 };
 

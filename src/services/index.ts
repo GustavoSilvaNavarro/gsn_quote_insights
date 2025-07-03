@@ -1,0 +1,1 @@
+export { addNewQuote } from './quotes';
