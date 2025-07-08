@@ -2,11 +2,12 @@ import { type NewQuote, newQuotePayload, type QuoteIdParam, quoteIdParam } from 
 import { addNewQuote, deleteQuote, getListOfQuotes, getSingleQuote, updateQuote } from '@services';
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 
+// NOTE: if I do arrow function I do not have access to the fastify instance using this
 const quoteRoutes = (fastify: FastifyInstance) => {
   fastify.get(
     '/quote/:quoteId',
     { schema: { params: quoteIdParam } },
-    async (req: FastifyRequest<{ Params: QuoteIdParam }>, reply: FastifyReply) => {
+    async function (req: FastifyRequest<{ Params: QuoteIdParam }>, reply: FastifyReply) {
       const { quoteId } = req.params;
       const quote = await getSingleQuote(quoteId);
 
@@ -15,7 +16,7 @@ const quoteRoutes = (fastify: FastifyInstance) => {
     },
   );
 
-  fastify.get('/quotes', async (_req: FastifyRequest, reply: FastifyReply) => {
+  fastify.get('/quotes', async function (_req: FastifyRequest, reply: FastifyReply) {
     const quotes = await getListOfQuotes();
 
     reply.status(200);
@@ -25,7 +26,7 @@ const quoteRoutes = (fastify: FastifyInstance) => {
   fastify.post(
     '/new/quote',
     { schema: { body: newQuotePayload } },
-    async (req: FastifyRequest<{ Body: NewQuote }>, reply: FastifyReply) => {
+    async function (req: FastifyRequest<{ Body: NewQuote }>, reply: FastifyReply) {
       const payload = req.body;
       const newQuote = await addNewQuote(payload);
 
@@ -37,7 +38,7 @@ const quoteRoutes = (fastify: FastifyInstance) => {
   fastify.put(
     '/quote/:quoteId',
     { schema: { params: quoteIdParam, body: newQuotePayload } },
-    async (req: FastifyRequest<{ Params: QuoteIdParam; Body: NewQuote }>, reply: FastifyReply) => {
+    async function (req: FastifyRequest<{ Params: QuoteIdParam; Body: NewQuote }>, reply: FastifyReply) {
       const updatedQuote = await updateQuote(req.body, req.params.quoteId);
 
       reply.status(200);
@@ -48,7 +49,7 @@ const quoteRoutes = (fastify: FastifyInstance) => {
   fastify.delete(
     '/quote/:quoteId',
     { schema: { params: quoteIdParam } },
-    async (req: FastifyRequest<{ Params: QuoteIdParam }>, reply: FastifyReply) => {
+    async function (req: FastifyRequest<{ Params: QuoteIdParam }>, reply: FastifyReply) {
       const deletedQuoteId = await deleteQuote(req.params.quoteId);
 
       reply.status(200);
