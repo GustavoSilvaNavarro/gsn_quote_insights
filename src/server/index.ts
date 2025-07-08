@@ -16,16 +16,22 @@ const fastify = Fastify({
 fastify.setValidatorCompiler(validatorCompiler);
 fastify.setSerializerCompiler(serializerCompiler);
 
+export const serverSetup = async () => {
+  // Register plugins
+  fastify.register(prismaPlugin);
+
+  fastify.register(helmet);
+  fastify.register(customHeadersPlugin);
+
+  // Register all routes
+  await registerRoutes(fastify);
+
+  return fastify;
+};
+
 export const startServer = async () => {
   try {
-    // Register plugins
-    fastify.register(prismaPlugin);
-
-    fastify.register(helmet);
-    fastify.register(customHeadersPlugin);
-
-    // Register all routes
-    await registerRoutes(fastify);
+    const fastify = await serverSetup();
 
     await fastify.listen({ port: PORT });
     fastify.log.info(`🚀 Quote Insight API is running, listening on ${PORT}`);

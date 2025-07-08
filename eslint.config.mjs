@@ -92,7 +92,6 @@ export default tseslint.config(
     files: ['tests/**/*.ts'],
     rules: {
       'import/first': 'off',
-      'simple-import-sort/imports': 'off',
     },
   },
   {

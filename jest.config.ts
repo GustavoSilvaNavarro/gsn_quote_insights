@@ -24,6 +24,9 @@ const config: Config = {
     '^@interfaces/(.*)$': '<rootDir>/src/interfaces/$1',
     '^@middlewares/(.*)$': '<rootDir>/src/server/middlewares/$1',
     '^@middlewares$': '<rootDir>/src/server/middlewares/index',
+    '^@tests/(.*)$': '<rootDir>/tests/$1',
+    '^@mocks/(.*)$': '<rootDir>/tests/__mocks__/$1',
+    '^@mocks$': '<rootDir>/tests/__mocks__/index',
   },
 };
 export default config;

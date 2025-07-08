@@ -15,7 +15,7 @@ const quoteRoutes = (fastify: FastifyInstance) => {
     },
   );
 
-  fastify.get('/quotes', async (req: FastifyRequest, reply: FastifyReply) => {
+  fastify.get('/quotes', async (_req: FastifyRequest, reply: FastifyReply) => {
     const quotes = await getListOfQuotes(fastify.prisma);
 
     reply.status(200);

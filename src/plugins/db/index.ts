@@ -1,6 +1,6 @@
 import logger from '@adapters/logger';
 import { PrismaClient } from '@prisma/client';
-import { type FastifyInstance } from 'fastify';
+import type { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
 
 export const prismaPlugin = fp(async (fastify: FastifyInstance, _opts: unknown) => {
