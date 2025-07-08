@@ -1,21 +1,23 @@
+import { testServerSetup } from '@tests/helpers/setupTestServer';
 import type { FastifyInstance } from 'fastify';
-
-const mockCreate = jest.fn();
-const mockFindMany = jest.fn();
+import supertest from 'supertest';
 
 const mockPrismaClient = {
   quotes: {
-    create: mockCreate,
-    findMany: mockFindMany,
+    create: jest.fn(),
+    findMany: jest.fn(),
+    findUniqueOrThrow: jest.fn(),
+    update: jest.fn(),
+    delete: jest.fn(),
   },
+  // NOTE: Since I am connecting the db I need to mock these
+  $connect: jest.fn(),
+  $disconnect: jest.fn(),
 };
 
 jest.mock('@prisma/client', () => ({
   PrismaClient: jest.fn(() => mockPrismaClient),
 }));
-
-import { testServerSetup } from '@tests/helpers/setupTestServer';
-import supertest from 'supertest';
 
 describe('Quote routes tests', () => {
   let app: FastifyInstance;
@@ -42,16 +44,22 @@ describe('Quote routes tests', () => {
     test('Should successfully return status code 201 and a new quote that has been stored in the db.', async () => {
       const mockNewQuote = { quote: 'Quote for testing' };
       const now = new Date();
-      const expectedNewQuote = { id: 1, ...mockNewQuote, createdAt: now, updatedAt: now };
-      mockCreate.mockResolvedValue(expectedNewQuote);
+      const expectedNewQuote = {
+        id: 1,
+        quote: mockNewQuote.quote.toLowerCase(),
+        createdAt: now.toISOString(),
+        updatedAt: now.toISOString(),
+      };
+      mockPrismaClient.quotes.create.mockResolvedValue(expectedNewQuote);
 
       const resp = await request.post(NEW_QUOTE_URI).send(mockNewQuote);
 
-      expect(mockCreate).toHaveBeenCalledTimes(1);
       expect(resp.status).toBe(201);
       expect(resp.headers['x-api-provider']).toEqual('Powered by GSN');
       expect(resp.headers['content-type']).toEqual(expect.stringContaining('json'));
-      expect(resp.body).toEqual(resp.body);
+      expect(resp.body).toEqual(expectedNewQuote);
+      expect(mockPrismaClient.quotes.create).toHaveBeenCalledTimes(1);
+      expect(mockPrismaClient.quotes.create).toHaveBeenCalledWith({ data: { quote: 'quote for testing' } });
     });
   });
 });

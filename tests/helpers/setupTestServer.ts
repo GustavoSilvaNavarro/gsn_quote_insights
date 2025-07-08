@@ -13,10 +13,14 @@ export const testServerSetup = async () => {
   fastify.setValidatorCompiler(validatorCompiler);
   fastify.setSerializerCompiler(serializerCompiler);
 
-  // Register plugins
+  const { prismaPlugin } = await import('@plugins');
+  fastify.register(prismaPlugin);
+
+  // Register other plugins AFTER Prisma
   fastify.register(customHeadersPlugin);
 
   await registerRoutes(fastify);
+  await fastify.ready();
 
   return fastify;
 };
