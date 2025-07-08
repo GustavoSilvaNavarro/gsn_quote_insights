@@ -28,7 +28,7 @@ describe('Quotes service tests', () => {
       const expectedNewQuote = { id: 1, ...mockNewQuote, created_at: now, updated_at: now };
       mockCreate.mockResolvedValueOnce(expectedNewQuote);
 
-      const newQuote = await addNewQuote(mockPrismaClient, mockNewQuote);
+      const newQuote = await addNewQuote(mockNewQuote);
 
       expect(newQuote).toEqual(expectedNewQuote);
     });
@@ -41,7 +41,7 @@ describe('Quotes service tests', () => {
       const expectedNewQuote = { id: 1, ...mockNewQuote, created_at: now, updated_at: now };
       mockFindMany.mockResolvedValueOnce([expectedNewQuote]);
 
-      const listOfQuotes = await getListOfQuotes(mockPrismaClient);
+      const listOfQuotes = await getListOfQuotes();
 
       expect(listOfQuotes).toHaveLength(1);
       expect(listOfQuotes).toEqual([expectedNewQuote]);

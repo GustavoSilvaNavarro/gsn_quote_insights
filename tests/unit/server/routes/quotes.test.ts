@@ -1,5 +1,20 @@
-import { testServerSetup } from '@tests/helpers/setupTestServer';
 import type { FastifyInstance } from 'fastify';
+
+const mockCreate = jest.fn();
+const mockFindMany = jest.fn();
+
+const mockPrismaClient = {
+  quotes: {
+    create: mockCreate,
+    findMany: mockFindMany,
+  },
+};
+
+jest.mock('@prisma/client', () => ({
+  PrismaClient: jest.fn(() => mockPrismaClient),
+}));
+
+import { testServerSetup } from '@tests/helpers/setupTestServer';
 import supertest from 'supertest';
 
 describe('Quote routes tests', () => {
@@ -28,11 +43,11 @@ describe('Quote routes tests', () => {
       const mockNewQuote = { quote: 'Quote for testing' };
       const now = new Date();
       const expectedNewQuote = { id: 1, ...mockNewQuote, createdAt: now, updatedAt: now };
-      // prismaMock.quotes.create.mockResolvedValue(expectedNewQuote);
+      mockCreate.mockResolvedValue(expectedNewQuote);
 
       const resp = await request.post(NEW_QUOTE_URI).send(mockNewQuote);
 
-      // expect(prismaMock.quotes.create).toHaveBeenCalledTimes(1);
+      expect(mockCreate).toHaveBeenCalledTimes(1);
       expect(resp.status).toBe(201);
       expect(resp.headers['x-api-provider']).toEqual('Powered by GSN');
       expect(resp.headers['content-type']).toEqual(expect.stringContaining('json'));
