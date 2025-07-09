@@ -1,12 +1,12 @@
 import logger from '@adapters/logger';
 import { PrismaClient } from '@prisma/client';
-import { type FastifyInstance } from 'fastify';
+import type { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
 
-export const prismaPlugin = fp(async (fastify: FastifyInstance, _opts: unknown) => {
-  try {
-    const prisma = new PrismaClient();
+export const prisma = new PrismaClient();
 
+const prismaPluginSetup = async (fastify: FastifyInstance, _opts: unknown) => {
+  try {
     await prisma.$connect();
 
     fastify.decorate('prisma', prisma);
@@ -15,10 +15,11 @@ export const prismaPlugin = fp(async (fastify: FastifyInstance, _opts: unknown) 
     fastify.addHook('onClose', async (instance) => {
       fastify.log.error('Disconnecting Prisma client...');
       await instance.prisma.$disconnect();
-      fastify.log.error('Prisma Client is disconnected');
     });
   } catch (err) {
     logger.error(err, 'Connection to DB has failed 😭');
     throw err;
   }
-});
+};
+
+export const prismaPlugin = fp(prismaPluginSetup, { name: 'prisma-plugin' });

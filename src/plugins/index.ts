@@ -1,1 +1,1 @@
-export { prismaPlugin } from './db';
+export { prisma, prismaPlugin } from './db';

@@ -89,6 +89,12 @@ export default tseslint.config(
     },
   },
   {
+    files: ['tests/**/*.ts'],
+    rules: {
+      'import/first': 'off',
+    },
+  },
+  {
     files: ['**/*.json'], // Apply only to JSON files
     plugins: {
       json: json,

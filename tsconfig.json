@@ -20,7 +20,7 @@
     "experimentalDecorators": true /* Enables experimental support for ES7 decorators. */,
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
-    "typeRoots": ["src/@types", "./node_modules/@types"],
+    "typeRoots": ["src/@types", "./node_modules/@types", "jest"],
     "baseUrl": "./" /* Base directory to resolve non-absolute module names. */,
     "paths": {
       "@config": ["./src/config"],
@@ -36,12 +36,15 @@
       "@interfaces/*": ["./src/interfaces/*"],
       "@middlewares": ["./src/server/middlewares/index"],
       "@middlewares/*": ["./src/server/middlewares/*"],
+      "@tests/*": ["./tests/*"],
+      "@mocks/*": ["./tests/__mocks__/*"],
+      "@mocks": ["./tests/__mocks__/index"],
     },
     "plugins": [
       { "transform": "typescript-transform-paths" },
       { "transform": "typescript-transform-paths", "afterDeclarations": true }
     ]
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "tests/**/*.ts", "jest.setup.ts", "jest.config.ts"],
   "exclude": ["node_modules"]
 }
