@@ -7,7 +7,7 @@ describe('Monitoring routes tests', () => {
   let request: ReturnType<typeof supertest>;
 
   beforeAll(async () => {
-    app = await testServerSetup();
+    app = await testServerSetup(true);
     await app.ready();
 
     request = supertest(app.server);

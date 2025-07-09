@@ -3,10 +3,10 @@ import { PrismaClient } from '@prisma/client';
 import type { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
 
-export const prismaSetup = async (fastify: FastifyInstance, _opts: unknown) => {
-  try {
-    const prisma = new PrismaClient();
+export const prisma = new PrismaClient();
 
+const prismaPluginSetup = async (fastify: FastifyInstance, _opts: unknown) => {
+  try {
     await prisma.$connect();
 
     fastify.decorate('prisma', prisma);
@@ -22,4 +22,4 @@ export const prismaSetup = async (fastify: FastifyInstance, _opts: unknown) => {
   }
 };
 
-export const prismaPlugin = fp(prismaSetup, { name: 'prisma-plugin' });
+export const prismaPlugin = fp(prismaPluginSetup, { name: 'prisma-plugin' });
